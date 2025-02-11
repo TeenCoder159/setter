@@ -10,5 +10,9 @@ fn main() {
 
     new_setting.write_config();
     let value = new_setting.read_config();
-    println!("Setting value: {}, Set val: {}", value, new_setting.mode);
+    println!(
+        "Setting value: {}, Set val: {}",
+        value.unwrap(),
+        new_setting.mode
+    );
 }

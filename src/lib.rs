@@ -46,25 +46,15 @@ pub mod config_pub {
             }
         }
 
-        pub fn read_config(&self) -> String {
+        pub fn read_config(&self) -> Option<String> {
             let contents = fs::read_to_string(&self.file).unwrap();
-            let (_, after) = contents
-                .split_once(&format!("{} = ", self.setting))
-                .unwrap();
-            let (line, _) = match after.split_once("\n") {
-                Some(val) => val,
-                _ => ("", ""),
-            };
-            let (value, _) = match line.split_once('"') {
-                Some(val) => val,
-                _ => ("", ""),
-            };
-            let (_, val) = match value.split_once('"') {
-                Some(val) => val,
-                _ => ("", ""),
-            };
-
-            val.to_string()
+            for line in contents.lines() {
+                if line.contains(&self.setting) {
+                    let (value, _) = line.split_once('"').unwrap().1.split_once('"').unwrap();
+                    return Some(value.to_string());
+                }
+            }
+            None
         }
 
         pub fn init(&self) {
