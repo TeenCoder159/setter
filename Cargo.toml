@@ -7,5 +7,6 @@ description = "A simple configurating tool"
 readme = "README.md"
 homepage = "https://github.com/TeenCoder159/setter"
 repository = "https://github.com/TeenCoder159/setter"
+license = "MIT"
 
 [dependencies]
