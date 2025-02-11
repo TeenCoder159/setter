@@ -2,5 +2,10 @@
 name = "setter"
 version = "0.1.0"
 edition = "2021"
+authors = ["Umang Surana <no1umang@gmail.com>"]
+description = "A simple configurating tool"
+readme = "README.md"
+homepage = "https://github.com/TeenCoder159/setter"
+repository = "https://github.com/TeenCoder159/setter"
 
 [dependencies]
