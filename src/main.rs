@@ -2,9 +2,9 @@ use setter::config_pub::Config;
 
 fn main() {
     let new_setting = Config {
-        setting: String::from("value"),
-        mode: String::from("nope"),
-        file: String::from("something"),
+        setting: String::from("foo"),
+        mode: String::from("bar"),
+        file: String::from("config.txt"),
     };
 
     new_setting.write_config();
