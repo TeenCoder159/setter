@@ -10,6 +10,16 @@ pub mod config_pub {
     }
 
     impl Config {
+        pub fn divider(&self, divider: String) {
+            let contents = match fs::read_to_string(&self.file) {
+                Ok(val) => val,
+                Err(e) => panic!("Error: {e}"),
+            };
+            match fs::write(&self.file, format!("{}\n{}\n", contents, divider)) {
+                Err(e) => eprintln!("Error: {e}"),
+                _ => {}
+            }
+        }
         pub fn write_config(&self) {
             let contents = match fs::read_to_string(&self.file) {
                 Ok(val) => val,

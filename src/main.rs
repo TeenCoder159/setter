@@ -4,7 +4,7 @@ fn main() {
     let new_setting = Config {
         setting: String::from("foo2"),
         mode: String::from("bar2"),
-        file: String::from("config.txt"),
+        file: String::from("config.toml"),
         divider: String::from("[main]"),
     };
 
@@ -15,4 +15,7 @@ fn main() {
         value.unwrap(),
         new_setting.mode
     );
+    new_setting.divider("[packages]".to_string());
+    let contents = std::fs::read_to_string(new_setting.file).expect("Error occured");
+    println!("{contents}");
 }
