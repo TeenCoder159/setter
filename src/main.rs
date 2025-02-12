@@ -1,4 +1,4 @@
-use setter::config::{Config, ConfigType};
+use setter::config::{read_config, Config, ConfigType};
 
 fn main() {
     let mut new_setting = Config {
@@ -13,7 +13,7 @@ fn main() {
     new_setting.setting = String::from("Another Value");
 
     new_setting.write_config();
-    let value = setter::config::read_config("Another Value".to_string());
+    let value = read_config("Another Value".to_string());
     println!(
         "Setting value: {}, Set val: {}",
         value.unwrap(),
