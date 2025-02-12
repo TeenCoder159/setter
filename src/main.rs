@@ -1,12 +1,16 @@
 use setter::config::{Config, ConfigType};
 
 fn main() {
-    let new_setting = Config {
+    let mut new_setting = Config {
         setting: String::from("foo2"),
         mode: String::from("bar2"),
         file: String::from("config.toml"),
         divider: String::from("[main]"),
     };
+
+    new_setting.init();
+
+    new_setting.setting = String::from("Another Value");
 
     new_setting.write_config();
     let value = new_setting.read_config();
