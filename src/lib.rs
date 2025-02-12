@@ -1,6 +1,12 @@
-pub mod config_pub {
+pub mod config {
 
     use std::fs;
+
+    pub enum ConfigType {
+        Config,
+        Divider,
+        Err,
+    }
 
     pub struct Config {
         pub setting: String,
@@ -10,7 +16,7 @@ pub mod config_pub {
     }
 
     impl Config {
-        pub fn divider(&self, divider: String) {
+        pub fn new_divider(&self, divider: String) {
             let contents = match fs::read_to_string(&self.file) {
                 Ok(val) => val,
                 Err(e) => panic!("Error: {e}"),
@@ -76,7 +82,24 @@ pub mod config_pub {
                 _ => {}
             }
         }
+
+        pub fn config_exists(&self, config: String) -> Option<ConfigType> {
+            let contents = match fs::read_to_string(&self.file) {
+                Ok(val) => val,
+                Err(_) => panic!("Contents file is empty and therefore doesn't contain any values"),
+            };
+            if !contents.is_empty() {
+                for line in contents.lines() {
+                    if line.contains(&config) && line.contains("[") && line.contains("]") {
+                        return Some(ConfigType::Divider);
+                    } else if line.contains(&config) && line.contains('"') && line.contains("=") {
+                        return Some(ConfigType::Config);
+                    }
+                }
+            } else {
+                return Some(ConfigType::Err);
+            }
+            None
+        }
     }
 }
-
-pub fn divider() {}

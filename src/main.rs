@@ -1,4 +1,4 @@
-use setter::config_pub::Config;
+use setter::config::{Config, ConfigType};
 
 fn main() {
     let new_setting = Config {
@@ -15,7 +15,12 @@ fn main() {
         value.unwrap(),
         new_setting.mode
     );
-    new_setting.divider("[packages]".to_string());
-    let contents = std::fs::read_to_string(new_setting.file).expect("Error occured");
+    new_setting.new_divider("[packages]".to_string());
+    let contents = std::fs::read_to_string(&new_setting.file).expect("Error occured");
     println!("{contents}");
+    match new_setting.config_exists("[main]".to_string()).unwrap() {
+        ConfigType::Divider => println!("Found a Divider"),
+        ConfigType::Config => println!("Found a configuration"),
+        _ => eprintln!("Didn't find anything"),
+    }
 }
