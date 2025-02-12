@@ -5,7 +5,6 @@ pub mod config {
     pub enum ConfigType {
         Config,
         Divider,
-        Err,
     }
 
     pub struct Config {
@@ -96,8 +95,6 @@ pub mod config {
                         return Some(ConfigType::Config);
                     }
                 }
-            } else {
-                return Some(ConfigType::Err);
             }
             None
         }
