@@ -13,7 +13,7 @@ fn main() {
     new_setting.setting = String::from("Another Value");
 
     new_setting.write_config();
-    let value = new_setting.read_config();
+    let value = setter::config::read_config("Another Value".to_string());
     println!(
         "Setting value: {}, Set val: {}",
         value.unwrap(),

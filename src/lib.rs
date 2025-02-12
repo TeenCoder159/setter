@@ -14,6 +14,17 @@ pub mod config {
         pub divider: String,
     }
 
+    pub fn read_config(config: String) -> Option<String> {
+        let contents = fs::read_to_string(&config).unwrap();
+        for line in contents.lines() {
+            if line.contains(&config) {
+                let (value, _) = line.split_once('"').unwrap().1.split_once('"').unwrap();
+                return Some(value.to_string());
+            }
+        }
+        None
+    }
+
     impl Config {
         pub fn new_divider(&self, divider: String) {
             let contents = match fs::read_to_string(&self.file) {
@@ -59,17 +70,6 @@ pub mod config {
                 Err(e) => panic!("Error: {e}"),
                 _ => {}
             }
-        }
-
-        pub fn read_config(&self) -> Option<String> {
-            let contents = fs::read_to_string(&self.file).unwrap();
-            for line in contents.lines() {
-                if line.contains(&self.setting) {
-                    let (value, _) = line.split_once('"').unwrap().1.split_once('"').unwrap();
-                    return Some(value.to_string());
-                }
-            }
-            None
         }
 
         pub fn init(&self) {
