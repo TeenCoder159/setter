@@ -9,7 +9,7 @@ Setter is a new project and will be available on crates.io once it is ready
 
 Example:
 ```rust
-use setter::config::{Config, ConfigType};
+use setter::config::{read_config, Config, ConfigType};
 
 fn main() {
     let mut new_setting = Config {
@@ -24,7 +24,7 @@ fn main() {
     new_setting.setting = String::from("Another Value");
 
     new_setting.write_config();
-    let value = new_setting.read_config();
+    let value = read_config("Another Value".to_string());
     println!(
         "Setting value: {}, Set val: {}",
         value.unwrap(),
@@ -46,7 +46,7 @@ fn main(){
 
     write_config() // creates a configuration (setting = "val")
 
-    read_config() // reads a config with the setting value of the struct
+    read_config("config to read") // reads a config and returns the value stored inside " "
 
     conifg_exists("config".to_string()) // returns what kind of config it is (Some(Divider), Some(Config), or None)
 
