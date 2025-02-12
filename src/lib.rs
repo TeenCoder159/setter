@@ -22,6 +22,7 @@ pub mod config {
                 return Some(value.to_string());
             }
         }
+
         None
     }
 
@@ -31,9 +32,8 @@ pub mod config {
                 Ok(val) => val,
                 Err(e) => panic!("Error: {e}"),
             };
-            match fs::write(&self.file, format!("{}\n{}\n", contents, divider)) {
-                Err(e) => eprintln!("Error: {e}"),
-                _ => {}
+            if let Err(e) = fs::write(&self.file, format!("{}\n{}\n", contents, divider)) {
+                eprintln!("Error: {e}")
             }
         }
         pub fn write_config(&self) {
@@ -59,26 +59,23 @@ pub mod config {
             } else {
                 final_contents = format!("{contents}\n{final_contents}");
             }
-            let mut writing_content = "".to_string();
-            for line in final_contents.lines() {
-                if !line.is_empty() {
-                    writing_content.push_str(format!("{line}\n").as_str());
-                }
-            }
 
-            match fs::write(&self.file, writing_content) {
-                Err(e) => panic!("Error: {e}"),
-                _ => {}
+            let writing_content = final_contents
+                .lines()
+                .filter(|x| !x.is_empty())
+                .fold(String::new(), |prefix, suffix| prefix + "\n" + suffix);
+
+            if let Err(e) = fs::write(&self.file, writing_content) {
+                panic!("Error: {e}")
             }
         }
 
         pub fn init(&self) {
-            match fs::write(
+            if let Err(e) = fs::write(
                 &self.file,
                 format!("{} = \"{}\"\n", self.setting, self.mode),
             ) {
-                Err(e) => panic!("Error: {e}"),
-                _ => {}
+                panic!("Error: {e}")
             }
         }
 
