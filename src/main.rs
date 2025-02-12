@@ -25,6 +25,5 @@ fn main() {
     match new_setting.config_exists("[main]".to_string()).unwrap() {
         ConfigType::Divider => println!("Found a Divider"),
         ConfigType::Config => println!("Found a configuration"),
-        _ => eprintln!("Didn't find anything"),
     }
 }
