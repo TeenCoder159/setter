@@ -26,6 +26,13 @@ pub mod config {
         None
     }
 
+    pub fn read_or(config: String, default: String) -> Option<String> {
+        match read_config(config) {
+            Some(val) => Some(val),
+            None => Some(default),
+        }
+    }
+
     impl Config {
         pub fn new_divider(&self, divider: String) {
             let contents = match fs::read_to_string(&self.file) {
