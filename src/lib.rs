@@ -45,52 +45,51 @@ pub mod config {
         pub fn write_config(&self) {
             let contents = match fs::read_to_string(&self.file) {
                 Ok(val) => val,
-                _ => "".to_string(),
+                _ => {
+                    Self::init(&self);
+                    return;
+                }
             };
             let mut final_contents =
                 format!("{}\n{} = \"{}\"", self.divider, self.setting, self.mode);
             if contents.contains(&self.divider) {
-                if !contents.is_empty() {
-                    let (prefix, suffix) = match contents.split_once(&self.divider) {
-                        Some((a, b)) => (a, b),
-                        None => ("", ""),
-                    };
+                let (prefix, suffix) = match contents.split_once(&self.divider) {
+                    Some((a, b)) => (a, b),
+                    None => ("", ""),
+                };
 
-                    final_contents = if prefix.is_empty() {
-                        format!("{final_contents}\n{suffix}")
-                    } else {
-                        format!("{prefix}\n{final_contents}\n{suffix}")
-                    };
-                }
+                final_contents = if prefix.is_empty() {
+                    format!("{final_contents}\n{suffix}")
+                } else {
+                    format!("{prefix}\n{final_contents}\n{suffix}")
+                };
             } else {
                 final_contents = format!("{contents}\n{final_contents}");
             }
 
-            let mut writing_content = final_contents
+            let writing_content = final_contents
                 .lines()
                 .filter(|x| !x.is_empty())
                 .fold(String::new(), |prefix, suffix| prefix + "\n" + suffix);
-
-            writing_content = writing_content
-                .lines()
-                .filter(|line| line != &"\n")
-                .collect::<Vec<_>>()
-                .join("\n");
 
             if let Err(e) = fs::write(&self.file, writing_content) {
                 panic!("Error: {e}")
             }
         }
 
-        pub fn change_val(&self, config: &str) {
+        pub fn change_val(&self, config: &str, new_val: &str) {
             let contents = match fs::read_to_string(&self.file) {
                 Ok(val) => val,
                 Err(e) => panic!("Error:\n{e}\n"),
             };
-            let final_contents = contents
-                .lines()
-                .filter(|line| !line.contains(&config))
-                .fold(String::new(), |prefix, suffix| prefix + "\n" + suffix);
+            let mut final_contents = "".to_string();
+            for line in contents.lines() {
+                if line.contains(config) {
+                    final_contents.push_str(format!("{} = \"{}\"\n", config, new_val).as_str());
+                } else {
+                    final_contents.push_str(format!("{line}\n").as_str());
+                }
+            }
 
             if let Err(e) = fs::write(&self.file, final_contents) {
                 panic!("Error: {e}")
