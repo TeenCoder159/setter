@@ -1,13 +1,16 @@
-use setter::config::{read_config, read_or, Config, ConfigType};
+use setter::config::{Config, ConfigType};
 
 fn main() {
-    let new_setting = Config {
-        setting: String::from("foo2"),
+    let setting = Config {
+        setting: String::from("foo"),
         mode: String::from("bar2"),
         file: String::from("config.toml"),
         divider: String::from("[main]"),
     };
 
-    let string = read_or("Something", "Hiya".to_string()).unwrap();
-    println!("{string}");
+    setting.init();
+
+    setting.change_val("new_value");
+    let new = setting.read_config("foo").unwrap();
+    println!("{new}");
 }
