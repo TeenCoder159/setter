@@ -4,7 +4,7 @@ Setter is a project of mine to help me read and write configuration files for my
 
 Setter can be used in various different places as many projects require a config file for saving things like workspace settings, project settings, currently open files and etc.
 
-Setter is a new project and will be available on crates.io once it is ready
+See the [docs](DOCS.md) on how to use it
 
 
 Example:
@@ -40,17 +40,4 @@ fn main() {
     }
 }
 ```
-```rust
 
-fn main(){
-
-    write_config() // creates a configuration (setting = "val")
-
-    read_config("config to read") // reads a config and returns the value stored inside " "
-
-    conifg_exists("config".to_string()) // returns what kind of config it is (Some(Divider), Some(Config), or None)
-
-    init() // Best for creating the settings for the first time as it directly creates the file
-
-}
-```
