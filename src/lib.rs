@@ -14,10 +14,10 @@ pub mod config {
         pub divider: String,
     }
 
-    pub fn read_config(config: String) -> Option<String> {
-        let contents = fs::read_to_string(&config).unwrap();
+    pub fn read_config(config: &str) -> Option<String> {
+        let contents = fs::read_to_string(&config).unwrap_or("".to_string());
         for line in contents.lines() {
-            if line.contains(&config) {
+            if line.contains(config) {
                 let (value, _) = line.split_once('"').unwrap().1.split_once('"').unwrap();
                 return Some(value.to_string());
             }
@@ -26,7 +26,7 @@ pub mod config {
         None
     }
 
-    pub fn read_or(config: String, default: String) -> Option<String> {
+    pub fn read_or(config: &str, default: String) -> Option<String> {
         match read_config(config) {
             Some(val) => Some(val),
             None => Some(default),
@@ -43,6 +43,24 @@ pub mod config {
                 eprintln!("Error: {e}")
             }
         }
+
+        pub fn get_divider(&self, config: &str) -> Option<String> {
+            let contents = match fs::read_to_string(&self.file) {
+                Ok(val) => val,
+                Err(_) => "".to_string(),
+            };
+            let mut divider = String::new();
+
+            for line in contents.lines() {
+                if line.contains("[") && line.contains("]") {
+                    divider = line.to_string();
+                } else if line.contains(config) {
+                    return Some(divider);
+                }
+            }
+            None
+        }
+
         pub fn write_config(&self) {
             let contents = match fs::read_to_string(&self.file) {
                 Ok(val) => val,
@@ -77,6 +95,36 @@ pub mod config {
             }
         }
 
+        pub fn change_val(&self, config: &str) {
+            let contents = match fs::read_to_string(&self.file) {
+                Ok(val) => val,
+                Err(e) => panic!("Error:\n{e}\n"),
+            };
+            let final_contents = contents
+                .lines()
+                .filter(|line| !line.contains(&config))
+                .fold(String::new(), |prefix, suffix| prefix + "\n" + suffix);
+
+            if let Err(e) = fs::write(&self.file, final_contents) {
+                panic!("Error: {e}")
+            }
+        }
+
+        pub fn remove_config(&self, config: &str) {
+            let contents = match fs::read_to_string(&self.file) {
+                Ok(val) => val,
+                Err(e) => panic!("Error:\n{e}\n"),
+            };
+            let final_contents = contents
+                .lines()
+                .filter(|line| !line.contains(&config))
+                .fold(String::new(), |prefix, suffix| prefix + "\n" + suffix);
+
+            if let Err(e) = fs::write(&self.file, final_contents) {
+                panic!("Error: {e}")
+            }
+        }
+
         pub fn init(&self) {
             if let Err(e) = fs::write(
                 &self.file,
@@ -86,7 +134,7 @@ pub mod config {
             }
         }
 
-        pub fn config_exists(&self, config: String) -> Option<ConfigType> {
+        pub fn config_exists(&self, config: &str) -> Option<ConfigType> {
             let contents = match fs::read_to_string(&self.file) {
                 Ok(val) => val,
                 Err(_) => panic!("Contents file is empty and therefore doesn't contain any values"),
