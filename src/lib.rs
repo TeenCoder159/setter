@@ -91,7 +91,7 @@ pub mod config {
                 Ok(val) => val,
                 Err(_) => panic!("Contents file is empty and therefore doesn't contain any values"),
             };
-            if !contents.is_empty() {
+            if contents.contains(&config) {
                 for line in contents.lines() {
                     if line.contains(&config) && line.contains("[") && line.contains("]") {
                         return Some(ConfigType::Divider);
