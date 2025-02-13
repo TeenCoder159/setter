@@ -1,4 +1,4 @@
-use setter::config::{Config, ConfigType};
+use setter::config::Config;
 
 fn main() {
     let mut setting = Config {
@@ -7,7 +7,7 @@ fn main() {
         file: String::from("config.toml"),
         divider: String::from("[main]"),
     };
-    let mut another_setting = Config {
+    let another_setting = Config {
         setting: String::from("foo2"),
         mode: String::from("bar2"),
         file: String::from("config.toml"),

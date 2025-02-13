@@ -36,7 +36,7 @@ pub mod config {
             None
         }
         pub fn read_or(&self, config: &str, default: String) -> Option<String> {
-            match Self::read_config(&self, config) {
+            match Self::read_config(self, config) {
                 Some(val) => Some(val),
                 None => Some(default),
             }
@@ -46,7 +46,7 @@ pub mod config {
             let contents = match fs::read_to_string(&self.file) {
                 Ok(val) => val,
                 _ => {
-                    Self::init(&self);
+                    Self::init(self);
                     return;
                 }
             };
@@ -101,11 +101,11 @@ pub mod config {
                 Ok(val) => val,
                 Err(_) => panic!("Contents file is empty and therefore doesn't contain any values"),
             };
-            if contents.contains(&config) {
+            if contents.contains(config) {
                 for line in contents.lines() {
-                    if line.contains(&config) && line.contains("[") && line.contains("]") {
+                    if line.contains(config) && line.contains("[") && line.contains("]") {
                         return Some(ConfigType::Divider);
-                    } else if line.contains(&config) && line.contains('"') && line.contains("=") {
+                    } else if line.contains(config) && line.contains('"') && line.contains("=") {
                         return Some(ConfigType::Config);
                     }
                 }
@@ -120,7 +120,7 @@ pub mod config {
             };
             let final_contents = contents
                 .lines()
-                .filter(|line| !line.contains(&config))
+                .filter(|line| !line.contains(config))
                 .fold(String::new(), |prefix, suffix| prefix + "\n" + suffix);
 
             if let Err(e) = fs::write(&self.file, final_contents) {
