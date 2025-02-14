@@ -72,7 +72,7 @@ pub mod config {
                 .filter(|x| !x.is_empty())
                 .fold(String::new(), |prefix, suffix| prefix + "\n" + suffix);
 
-            if let Err(e) = fs::write(&self.file, writing_content) {
+            if let Err(e) = fs::write(&self.file, writing_content.trim_start()) {
                 panic!("Error: {e}")
             }
         }
