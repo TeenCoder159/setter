@@ -14,15 +14,9 @@ fn main() {
         divider: String::from("[nmain]"),
     };
 
-    setting.write_config();
-
-    setting.setting = "new_val".to_string();
-
-    setting.write_config();
-
-    setting.change_val("foo", "new_value");
-    let new = setting.read_config("foo").unwrap();
+    let new = setting.read_config("CUSTOM", "nmain").unwrap();
     println!("{new}");
+    println!("{}", setting.get_divider("foo").unwrap());
 
     another_setting.write_config();
 }

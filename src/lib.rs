@@ -24,10 +24,14 @@ pub mod config {
             }
         }
 
-        pub fn read_config(&self, config: &str) -> Option<String> {
+        pub fn read_config(&self, config: &str, divider: &str) -> Option<String> {
             let contents = fs::read_to_string(&self.file).unwrap_or("".to_string());
+            let mut divider_met = false;
             for line in contents.lines() {
-                if line.contains(config) {
+                if line.contains(divider) && line.contains('[') && line.contains(']') {
+                    divider_met = true;
+                }
+                if line.contains(config) && divider_met {
                     let (value, _) = line.split_once('"').unwrap().1.split_once('"').unwrap();
                     return Some(value.to_string());
                 }
@@ -35,8 +39,8 @@ pub mod config {
 
             None
         }
-        pub fn read_or(&self, config: &str, default: String) -> Option<String> {
-            match Self::read_config(self, config) {
+        pub fn read_or(&self, config: &str, divider: &str, default: String) -> Option<String> {
+            match Self::read_config(self, config, divider) {
                 Some(val) => Some(val),
                 None => Some(default),
             }
@@ -153,6 +157,21 @@ pub mod config {
                 }
             }
             None
+        }
+
+        pub fn get_all_dividers(&self) -> Vec<String> {
+            let contents = match fs::read_to_string(&self.file) {
+                Ok(val) => val,
+                Err(_) => "".to_string(),
+            };
+            let mut dividers = Vec::new();
+
+            for line in contents.lines() {
+                if line.contains("[") && line.contains("]") {
+                    dividers.push(line.to_string());
+                }
+            }
+            dividers
         }
     }
 }
