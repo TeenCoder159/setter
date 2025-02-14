@@ -17,6 +17,7 @@ fn main() {
     let new = setting.read_config("CUSTOM", "nmain").unwrap();
     println!("{new}");
     println!("{}", setting.get_divider("foo").unwrap());
+    setting.remove_config("Target");
 
     another_setting.write_config();
 }
