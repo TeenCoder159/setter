@@ -16,9 +16,8 @@ fn main() {
 
     let new = setting.read_config("CUSTOM", "nmain").unwrap();
     println!("{new}");
-<<<<<<< HEAD
+
     println!("{}", setting.first_config().unwrap());
-=======
 
     another_setting.write_config();
 }
