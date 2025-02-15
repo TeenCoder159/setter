@@ -2,14 +2,6 @@
 
 ## Setter is used to store configurations into a file.
 
-### List of functions not working as of now:
-
-```rust
-fn not_working(){
-    remove_config();
-}
-```
-
 ### Usage:
 
 Start by creating a struct from config::ConfigType
