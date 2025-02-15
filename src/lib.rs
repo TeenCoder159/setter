@@ -39,6 +39,22 @@ pub mod config {
 
             None
         }
+
+        pub fn read_first_config(&self) -> Option<String> {
+            let contents = fs::read_to_string(&self.file).unwrap_or("".to_string());
+            match contents
+                .lines()
+                .filter(|x| x.contains("="))
+                .collect::<String>()
+                .split_once(' ')
+            {
+                Some(value) => return Some(value.0.to_string()),
+                None => {
+                    return None;
+                }
+            }
+        }
+
         pub fn read_or(&self, config: &str, divider: &str, default: String) -> Option<String> {
             match Self::read_config(self, config, divider) {
                 Some(val) => Some(val),
