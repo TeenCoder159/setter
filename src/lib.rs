@@ -96,6 +96,9 @@ pub mod config {
 
                 final_contents = if prefix.is_empty() {
                     format!("{final_contents}\n{suffix}")
+                        .trim_start()
+                        .trim()
+                        .to_string()
                 } else {
                     format!("{prefix}\n{final_contents}\n{suffix}")
                 };

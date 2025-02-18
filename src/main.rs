@@ -13,9 +13,8 @@ fn main() {
         file: String::from("config.toml"),
         divider: String::from("[nmain]"),
     };
-
-    let new = setting.read_config("CUSTOM", "nmain").unwrap();
-    println!("{new}");
+    setting.init();
+    another_setting.write_config();
 
     println!("{}", setting.first_config().unwrap());
 
